@@ -1,0 +1,164 @@
+{
+  "10.6.72.6": {
+    "250703-2057": {
+      "arp-entries": "11 entries",
+      "vlan_summary": "101 active, 0 destroyed",
+      "bgp-summary": "up : 4, down : 0",
+      "bfd-summary": "up : 4, down : 0",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 11 percent, RAM : 12 percent",
+      "ddos_summary": "Total : 45, Mod : 2, Rcvd : 15, Violation : 0",
+      "mac-entries": "318 entries",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 1581 Destinations, Routes : 2817 Routes",
+      "evpn-entries": "318 entries"
+    },
+    "250704-1505": {
+      "arp-entries": "11 entries",
+      "vlan_summary": "101 active, 0 destroyed",
+      "bgp-summary": "up : 4, down : 0",
+      "bfd-summary": "up : 4, down : 0",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 10 percent, RAM : 13 percent",
+      "ddos_summary": "Total : 45, Mod : 2, Rcvd : 15, Violation : 0",
+      "mac-entries": "318 entries",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 1581 Destinations, Routes : 2817 Routes",
+      "evpn-entries": "318 entries"
+    }
+  },
+  "10.6.72.10": {
+    "250703-2057": {
+      "arp-entries": "585 entries",
+      "vlan_summary": "152 active, 0 destroyed",
+      "bgp-summary": "up : 29, down : 0",
+      "bfd-summary": "up : 354, down : 0",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 34 percent, RAM : 10 percent",
+      "ddos_summary": "Total : 75, Mod : 4, Rcvd : 24, Violation : 0",
+      "mac-entries": "637 entries",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 3903 Destinations, Routes : 6888 Routes",
+      "evpn-entries": "780 entries"
+    },
+    "250704-1505": {
+      "arp-entries": "585 entries",
+      "vlan_summary": "152 active, 0 destroyed",
+      "bgp-summary": "up : 29, down : 0",
+      "bfd-summary": "up : 354, down : 0",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 33 percent, RAM : 10 percent",
+      "ddos_summary": "Total : 75, Mod : 4, Rcvd : 24, Violation : 0",
+      "mac-entries": "636 entries",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 3901 Destinations, Routes : 6885 Routes",
+      "evpn-entries": "779 entries"
+    }
+  },
+  "10.6.72.5": {
+    "250703-2057": {
+      "arp-entries": "11 entries",
+      "vlan_summary": "101 active, 0 destroyed",
+      "bgp-summary": "up : 4, down : 0",
+      "bfd-summary": "up : 4, down : 0",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 7 percent, RAM : 14 percent",
+      "ddos_summary": "Total : 45, Mod : 2, Rcvd : 17, Violation : 0",
+      "mac-entries": "318 entries",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 1581 Destinations, Routes : 2825 Routes",
+      "evpn-entries": "318 entries"
+    },
+    "250704-1505": {
+      "arp-entries": "11 entries",
+      "vlan_summary": "101 active, 0 destroyed",
+      "bgp-summary": "up : 4, down : 0",
+      "bfd-summary": "up : 4, down : 0",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 11 percent, RAM : 13 percent",
+      "ddos_summary": "Total : 45, Mod : 2, Rcvd : 17, Violation : 0",
+      "mac-entries": "318 entries",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 1581 Destinations, Routes : 2825 Routes",
+      "evpn-entries": "318 entries"
+    }
+  },
+  "10.6.72.4": {
+    "250703-2057": {
+      "arp-entries": "10 entries",
+      "vlan_summary": "109 active, 0 destroyed",
+      "bgp-summary": "up : 4, down : 0",
+      "bfd-summary": "up : 4, down : 0",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 26 percent, RAM : 14 percent",
+      "ddos_summary": "Total : 45, Mod : 2, Rcvd : 18, Violation : 0",
+      "mac-entries": "408 entries",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 2040 Destinations, Routes : 3903 Routes",
+      "evpn-entries": "408 entries"
+    },
+    "250704-1505": {
+      "arp-entries": "10 entries",
+      "vlan_summary": "109 active, 0 destroyed",
+      "bgp-summary": "up : 4, down : 0",
+      "bfd-summary": "up : 4, down : 0",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 20 percent, RAM : 14 percent",
+      "ddos_summary": "Total : 45, Mod : 2, Rcvd : 18, Violation : 0",
+      "mac-entries": "409 entries",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 2041 Destinations, Routes : 3905 Routes",
+      "evpn-entries": "409 entries"
+    }
+  },
+  "10.6.72.1": {
+    "250703-2057": {
+      "arp-entries": "32 entries",
+      "bgp-summary": "up : 43, down : 1",
+      "bfd-summary": "up : 43, down : 1",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 14 percent, RAM : 7 percent",
+      "ddos_summary": "Total : 75, Mod : 0, Rcvd : 12, Violation : 0",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 7771 Destinations, Routes : 15578 Routes"
+    },
+    "250704-1505": {
+      "arp-entries": "32 entries",
+      "bgp-summary": "up : 43, down : 1",
+      "bfd-summary": "up : 43, down : 1",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 13 percent, RAM : 7 percent",
+      "ddos_summary": "Total : 75, Mod : 0, Rcvd : 12, Violation : 0",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 7770 Destinations, Routes : 15576 Routes"
+    }
+  },
+  "10.6.72.12": {
+    "250703-2057": {
+      "arp-entries": "43 entries",
+      "vlan_summary": "34 active, 0 destroyed",
+      "bgp-summary": "up : 14, down : 0",
+      "bfd-summary": "up : 64, down : 0",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 30 percent, RAM : 10 percent",
+      "ddos_summary": "Total : 75, Mod : 5, Rcvd : 25, Violation : 0",
+      "mac-entries": "61 entries",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 1332 Destinations, Routes : 2199 Routes",
+      "evpn-entries": "89 entries"
+    },
+    "250704-1505": {
+      "arp-entries": "43 entries",
+      "vlan_summary": "34 active, 0 destroyed",
+      "bgp-summary": "up : 14, down : 0",
+      "bfd-summary": "up : 64, down : 0",
+      "chassis_alarm": "0 active alarm",
+      "chassis-util": "CPU : 32 percent, RAM : 10 percent",
+      "ddos_summary": "Total : 75, Mod : 5, Rcvd : 25, Violation : 0",
+      "mac-entries": "61 entries",
+      "system_alarm": "0 active alarm",
+      "route-evpn-summary": "Destination : 1332 Destinations, Routes : 2199 Routes",
+      "evpn-entries": "89 entries"
+    }
+  }
+}
