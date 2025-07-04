@@ -1,0 +1,67 @@
+IP,checklist,250703-2057,250704-1505
+10.6.72.6,arp-entries,11 entries,11 entries
+10.6.72.6,bfd-summary,"up : 4, down : 0","up : 4, down : 0"
+10.6.72.6,bgp-summary,"up : 4, down : 0","up : 4, down : 0"
+10.6.72.6,chassis-util,"CPU : 11 percent, RAM : 12 percent","CPU : 10 percent, RAM : 13 percent"
+10.6.72.6,chassis_alarm,0 active alarm,0 active alarm
+10.6.72.6,ddos_summary,"Total : 45, Mod : 2, Rcvd : 15, Violation : 0","Total : 45, Mod : 2, Rcvd : 15, Violation : 0"
+10.6.72.6,evpn-entries,318 entries,318 entries
+10.6.72.6,mac-entries,318 entries,318 entries
+10.6.72.6,route-evpn-summary,"Destination : 1581 Destinations, Routes : 2817 Routes","Destination : 1581 Destinations, Routes : 2817 Routes"
+10.6.72.6,system_alarm,0 active alarm,0 active alarm
+10.6.72.6,vlan_summary,"101 active, 0 destroyed","101 active, 0 destroyed"
+10.6.72.10,arp-entries,585 entries,585 entries
+10.6.72.10,bfd-summary,"up : 354, down : 0","up : 354, down : 0"
+10.6.72.10,bgp-summary,"up : 29, down : 0","up : 29, down : 0"
+10.6.72.10,chassis-util,"CPU : 34 percent, RAM : 10 percent","CPU : 33 percent, RAM : 10 percent"
+10.6.72.10,chassis_alarm,0 active alarm,0 active alarm
+10.6.72.10,ddos_summary,"Total : 75, Mod : 4, Rcvd : 24, Violation : 0","Total : 75, Mod : 4, Rcvd : 24, Violation : 0"
+10.6.72.10,evpn-entries,780 entries,779 entries
+10.6.72.10,mac-entries,637 entries,636 entries
+10.6.72.10,route-evpn-summary,"Destination : 3903 Destinations, Routes : 6888 Routes","Destination : 3901 Destinations, Routes : 6885 Routes"
+10.6.72.10,system_alarm,0 active alarm,0 active alarm
+10.6.72.10,vlan_summary,"152 active, 0 destroyed","152 active, 0 destroyed"
+10.6.72.5,arp-entries,11 entries,11 entries
+10.6.72.5,bfd-summary,"up : 4, down : 0","up : 4, down : 0"
+10.6.72.5,bgp-summary,"up : 4, down : 0","up : 4, down : 0"
+10.6.72.5,chassis-util,"CPU : 7 percent, RAM : 14 percent","CPU : 11 percent, RAM : 13 percent"
+10.6.72.5,chassis_alarm,0 active alarm,0 active alarm
+10.6.72.5,ddos_summary,"Total : 45, Mod : 2, Rcvd : 17, Violation : 0","Total : 45, Mod : 2, Rcvd : 17, Violation : 0"
+10.6.72.5,evpn-entries,318 entries,318 entries
+10.6.72.5,mac-entries,318 entries,318 entries
+10.6.72.5,route-evpn-summary,"Destination : 1581 Destinations, Routes : 2825 Routes","Destination : 1581 Destinations, Routes : 2825 Routes"
+10.6.72.5,system_alarm,0 active alarm,0 active alarm
+10.6.72.5,vlan_summary,"101 active, 0 destroyed","101 active, 0 destroyed"
+10.6.72.4,arp-entries,10 entries,10 entries
+10.6.72.4,bfd-summary,"up : 4, down : 0","up : 4, down : 0"
+10.6.72.4,bgp-summary,"up : 4, down : 0","up : 4, down : 0"
+10.6.72.4,chassis-util,"CPU : 26 percent, RAM : 14 percent","CPU : 20 percent, RAM : 14 percent"
+10.6.72.4,chassis_alarm,0 active alarm,0 active alarm
+10.6.72.4,ddos_summary,"Total : 45, Mod : 2, Rcvd : 18, Violation : 0","Total : 45, Mod : 2, Rcvd : 18, Violation : 0"
+10.6.72.4,evpn-entries,408 entries,409 entries
+10.6.72.4,mac-entries,408 entries,409 entries
+10.6.72.4,route-evpn-summary,"Destination : 2040 Destinations, Routes : 3903 Routes","Destination : 2041 Destinations, Routes : 3905 Routes"
+10.6.72.4,system_alarm,0 active alarm,0 active alarm
+10.6.72.4,vlan_summary,"109 active, 0 destroyed","109 active, 0 destroyed"
+10.6.72.1,arp-entries,32 entries,32 entries
+10.6.72.1,bfd-summary,"up : 43, down : 1","up : 43, down : 1"
+10.6.72.1,bgp-summary,"up : 43, down : 1","up : 43, down : 1"
+10.6.72.1,chassis-util,"CPU : 14 percent, RAM : 7 percent","CPU : 13 percent, RAM : 7 percent"
+10.6.72.1,chassis_alarm,0 active alarm,0 active alarm
+10.6.72.1,ddos_summary,"Total : 75, Mod : 0, Rcvd : 12, Violation : 0","Total : 75, Mod : 0, Rcvd : 12, Violation : 0"
+10.6.72.1,evpn-entries,,
+10.6.72.1,mac-entries,,
+10.6.72.1,route-evpn-summary,"Destination : 7771 Destinations, Routes : 15578 Routes","Destination : 7770 Destinations, Routes : 15576 Routes"
+10.6.72.1,system_alarm,0 active alarm,0 active alarm
+10.6.72.1,vlan_summary,,
+10.6.72.12,arp-entries,43 entries,43 entries
+10.6.72.12,bfd-summary,"up : 64, down : 0","up : 64, down : 0"
+10.6.72.12,bgp-summary,"up : 14, down : 0","up : 14, down : 0"
+10.6.72.12,chassis-util,"CPU : 30 percent, RAM : 10 percent","CPU : 32 percent, RAM : 10 percent"
+10.6.72.12,chassis_alarm,0 active alarm,0 active alarm
+10.6.72.12,ddos_summary,"Total : 75, Mod : 5, Rcvd : 25, Violation : 0","Total : 75, Mod : 5, Rcvd : 25, Violation : 0"
+10.6.72.12,evpn-entries,89 entries,89 entries
+10.6.72.12,mac-entries,61 entries,61 entries
+10.6.72.12,route-evpn-summary,"Destination : 1332 Destinations, Routes : 2199 Routes","Destination : 1332 Destinations, Routes : 2199 Routes"
+10.6.72.12,system_alarm,0 active alarm,0 active alarm
+10.6.72.12,vlan_summary,"34 active, 0 destroyed","34 active, 0 destroyed"
