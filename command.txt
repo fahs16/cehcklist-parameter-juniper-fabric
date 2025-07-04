@@ -1,0 +1,13 @@
+show interface detail | display json
+show vlan extensive | display json
+show ethernet-switching table | display json
+show evpn database | display json
+show configuration | display inhe | display json
+show chassis alarm | display json
+show system alarm | display json
+show chassis routing-engine | display json
+show route summary table bgp.evpn.0 | display json
+show arp no-resolve | display json
+show bgp neighbor | display json
+show bfd session detail | display json
+show ddos-protection protocols | display json
