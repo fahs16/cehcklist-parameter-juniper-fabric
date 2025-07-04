@@ -1,0 +1,6 @@
+10.6.72.1|||user|||password
+10.6.72.4|||user|||password
+10.6.72.5|||user|||password
+10.6.72.6|||user|||password
+10.6.72.10|||user|||password
+10.6.72.12|||user|||password
