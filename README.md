@@ -1,11 +1,9 @@
-# CHEKLIST PARAMETERJ UNIPER IP FABRIC
-# v2.0
+# CHEKLIST PARAMETERJ UNIPER IP FABRIC v2.0
 
 ## Description Project
 This document explains how to execute the tools for checklist paramater
 
-## Version and Requrement (Mandatory)
-- Code v2.0
+## Version and Requirements (Mandatory)
 - Python Programming Language **3.13.4**
 - PIP **v25.1.1**
 **Make Sure you're are installed python and PIP**
@@ -13,7 +11,7 @@ This document explains how to execute the tools for checklist paramater
 ---
 
 ## Installation Guide
-1. **Navigate to the directory:**
+1. **Navigate to the directory downloaded:**
     ```bash
     extract the file checklist-parameter-juniper-fabric.zip
     ```
