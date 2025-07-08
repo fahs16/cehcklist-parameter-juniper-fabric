@@ -7,10 +7,98 @@ import threading
 import csv
 import pandas as pd
 
-#MUST CHANGE !!!!
-jumphost_ip = "10.175.1.151"
-jumphost_user = "USER"
-jumphost_pass = "PASSWORD"
+INFO = "\033[34m[INFO]\033[0m"
+DEBUG = "\033[33m[DEBUG]\033[0m"
+WARNING = "\033[33m[WARNING]\033[0m"
+ERROR = "\033[31m[ERROR]\033[0m"
+SUCCESS = "\033[32m[SUCCESS]\033[0m"
+INPUT = "\033[33m[INPUT]\033[0m"
+
+
+def banner():
+    title = """
+    ======================================================================
+     ██████╗██╗  ██╗███████╗ ██████╗██╗  ██╗██╗     ██╗███████╗████████╗
+    ██╔════╝██║  ██║██╔════╝██╔════╝██║ ██╔╝██║     ██║██╔════╝╚══██╔══╝
+    ██║     ███████║█████╗  ██║     █████╔╝ ██║     ██║███████╗   ██║   
+    ██║     ██╔══██║██╔══╝  ██║     ██╔═██╗ ██║     ██║╚════██║   ██║   
+    ╚██████╗██║  ██║███████╗╚██████╗██║  ██╗███████╗██║███████║   ██║   
+     ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝╚══════╝   ╚═╝   
+                                                                        
+    ██████╗  █████╗ ██████╗  █████╗ ███╗   ███╗███████╗                 
+    ██╔══██╗██╔══██╗██╔══██╗██╔══██╗████╗ ████║██╔════╝                 
+    ██████╔╝███████║██████╔╝███████║██╔████╔██║███████╗                 
+    ██╔═══╝ ██╔══██║██╔══██╗██╔══██║██║╚██╔╝██║╚════██║                 
+    ██║     ██║  ██║██║  ██║██║  ██║██║ ╚═╝ ██║███████║██╗              
+    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝ 
+    JUNIPER NETWORK
+    Version: v2.0
+    ======================================================================
+    """
+    print(title)
+    
+def input_jumphost():
+    print("Please input your jumphost credentials:")
+    jh_ip = input(f"{INPUT} JUMPSHOT IP: ").strip()
+    jh_user = input(f"{INPUT} JUMPSHOT USER: ").strip()
+    jh_pass = input(f"{INPUT} JUMPSHOT PASSWORD: ").strip()
+    print("\n")
+    return jh_ip, jh_user, jh_pass
+
+def input_device_list():
+    print("Please input your device list ip (comma-separated):")
+    print("Example: 192.168.1.1,192.168.1.2")
+    device_list = input(f"{INPUT} DEVICE LIST IP: ").strip().split(",")
+    print("\n")
+    print(f"{INFO} Please input device credentials:")
+    print(f"{INFO} Default Username: appeventf")
+    
+    use_default = input("Use default credentials for all devices? (Y/n): ").strip().lower()
+    if use_default in ['', 'y', 'yes']:
+        user = "appeventf"
+        pwd = "Penguin24!"
+    else:
+        user = input(f"{INPUT} DEVICE USERNAME: ").strip()
+        pwd = input(f"{INPUT} DEVICE PASSWORD: ").strip()
+    print("\n")
+    # return device_list.split(",")
+    return [(ip.strip(), user, pwd) for ip in device_list]
+
+def input_command_list():
+    print(f"{INFO} Please select input command list (comma-separated):")
+    print("1). List Command Checklist Parameter")
+    print("2). Input Command List Custom")
+    
+    option = input(f"{INPUT} Select Option (1/2): ").strip()
+    print("\n")
+    if option == "1":
+        command_list = [
+            "show interface detail | display json",
+            "show vlan extensive | display json",
+            "show ethernet-switching table | display json",
+            "show evpn database | display json",
+            "show configuration | display inheritance | display json",
+            "show chassis alarm | display json",
+            "show system alarm | display json",
+            "show chassis routing-engine | display json",
+            "show route summary table bgp.evpn.0 | display json",
+            "show arp no-resolve | display json",
+            "show bgp neighbor | display json",
+            "show bfd session detail | display json",
+            "show ddos-protection protocols | display json"
+        ]
+        print(f"{INFO} Using default command list:")
+        for cmd in command_list:
+            print(f"  > {cmd}")
+        print()
+    else:
+        print(f"{INFO} Please input your command list (comma-separated):")
+        print("Example: show interface terse, show vlan extensive")
+        command_input = input(f"{INPUT} COMMAND LIST:\n").strip()
+        print("\n")
+        command_list = [cmd.strip() for cmd in command_input.split(",") if cmd.strip()]
+
+    return command_list
 
 def connect_jumphost(jh_ip, jh_user, jh_pass):
     jh_client = paramiko.SSHClient()
@@ -23,7 +111,7 @@ def run_on_target_via_jump(jh_client, target_ip, target_user, target_pass, comma
         # Open fresh channel to target (don't reuse)
         jump_transport = jh_client.get_transport()
         if not jump_transport:
-            return "ERROR: Jump host transport not available"
+            return "{ERROR}: Jump host transport not available"
 
         channel = jump_transport.open_channel(
             "direct-tcpip",
@@ -53,13 +141,13 @@ def run_on_target_via_jump(jh_client, target_ip, target_user, target_pass, comma
         target_transport.close()
 
         if error:
-            return f"ERROR: {error}"
+            return f"{ERROR}: {error}"
         return output
 
     except paramiko.ssh_exception.AuthenticationException as e:
         return f"Authentication failed: {e}"
     except paramiko.ssh_exception.SSHException as e:
-        return f"SSH error: {e}"
+        return f"{ERROR} SSH: {e}"
     except Exception as e:
         return f"Exception: {e}"
 
@@ -69,25 +157,25 @@ def process_device(ip, user, pwd, jh_client, command_list, output_dir):
     for cmd in command_list:
         print(f"  > [{ip}] Running: {cmd}")
         result = run_on_target_via_jump(jh_client, ip, user, pwd, cmd)
-        filename = f"{ip}-{cmd.replace(' ', '_')}.txt"
-        if "no-more" in cmd:
-            filename = f"{ip}-{cmd.split(' | no-more')[0].replace(' ', '_')}.txt"
-        if "display inheritance" in cmd:
-            filename = f"{ip}-{cmd.split(' | display inheritance')[0].replace(' ', '_')}.txt"
+
+        # [INFO] OS windows melarang penggunaan PIPE, opsi Bersihkan karakter ilegal dari command
+        safe_cmd = cmd.replace(" ", "_").replace("|", "_").replace("/", "_").replace("\\", "_")
+        filename = f"{ip}-{safe_cmd}.txt"
+
         if "json" in cmd:
-            base_name = f"{ip}-{cmd.split(' | display json')[0].replace(' ', '_')}"
             try:
                 json.loads(result)
-                filename = f"{base_name}.json"
+                filename = f"{ip}-{safe_cmd}.json"
             except json.JSONDecodeError:
                 print(f"  ! WARNING: Output from {ip} for '{cmd}' is not valid JSON, saving as .txt")
-                filename = f"{base_name}.txt"
-        with open(os.path.join(output_dir, filename), "w") as f:
+
+        with open(os.path.join(output_dir, filename), "w", encoding="utf-8", errors="replace") as f:
             f.write(result)
+
 
 def load_device_list(filename):
     devices = []
-    with open(filename, "r") as f:
+    with open(filename, "r", encoding="utf-8") as f:
         for line in f:
             parts = line.strip().split("|||")
             if len(parts) == 3:
@@ -97,7 +185,7 @@ def load_device_list(filename):
 
 def load_command_list(filename):
     commands = []
-    with open(filename, "r") as f:
+    with open(filename, "r", encoding="utf-8") as f:
         for line in f:
             cmd = line.strip()
             if cmd:
@@ -107,12 +195,12 @@ def load_command_list(filename):
 def summary_rate(timestamp):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/summary_rate-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write("ip,interface,input_rate,output_rate\n")  # Header CSV
         for filename in os.listdir(json_folder):
             if "show_interface_detail" in filename and filename.endswith(".json"):
                 ip = filename.split(".json")[0].split("-")[0]
-                with open(os.path.join(json_folder, filename), "r") as file:
+                with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                     data = json.load(file)
 
                 try:
@@ -149,19 +237,19 @@ def summary_rate(timestamp):
                                     else: 
                                         print(f"No traffic statistics for logical interface {logical['name'][0]['data']} on {ip}")
                 except Exception as e:
-                    print(f"Error processing {filename}: {e}")
+                    print(f"{ERROR} processing {filename}: {e}")
 
 def vlan_extensive(timestamp):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/vlan_extensive-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write("ip,vlan_name,vlan_state,vlan_tag,vlan_vxlan_enabled,tagged_interface,untagged_interface,mac_count\n")  # Header CSV
-        with open(f"{json_folder}/vlan_summary-{timestamp}.csv", "w") as txt_out:
+        with open(f"{json_folder}/vlan_summary-{timestamp}.csv", "w", encoding="utf-8") as txt_out:
             txt_out.write(f"ip,vlan_active_count,vlan_destroy_count\n") # Header for summary CSV
             for filename in os.listdir(json_folder):
                 if "show_vlan_extensive" in filename and filename.endswith(".json"):
                     ip = filename.split(".json")[0].split("-")[0]
-                    with open(os.path.join(json_folder, filename), "r") as file:
+                    with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                         data = json.load(file)
 
                     try:
@@ -185,19 +273,19 @@ def vlan_extensive(timestamp):
                         summary_line = f"{ip},{vlan_active_count},{vlan_destroy_count}\n"
                         txt_out.write(summary_line)
                     except Exception as e:
-                        print(f"Error processing {filename}: {e}")
+                        print(f"{ERROR} processing {filename}: {e}")
 
 def ethernet_switching_table(timestamp):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/ethernet_switching_table-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write("ip,mac_addr,interface\n")  # Header CSV
-        with open(f"{json_folder}/ethernet_switching_table_summary-{timestamp}.csv", "w") as txt_out:
+        with open(f"{json_folder}/ethernet_switching_table_summary-{timestamp}.csv", "w", encoding="utf-8") as txt_out:
             txt_out.write(f"ip,mac_count\n") # Header for summary CSV
             for filename in os.listdir(json_folder):
                 if "show_ethernet-switching_table" in filename and filename.endswith(".json"):
                     ip = filename.split(".json")[0].split("-")[0]
-                    with open(os.path.join(json_folder, filename), "r") as file:
+                    with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                         data = json.load(file)
 
                     try:
@@ -210,19 +298,19 @@ def ethernet_switching_table(timestamp):
                         summary_line = f"{ip},{len(all_mac)}\n"
                         txt_out.write(summary_line)
                     except Exception as e:
-                        print(f"Error processing {filename}: {e}")
+                        print(f"{ERROR} processing {filename}: {e}")
 
 def evpn_database(timestamp):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/evpn_database-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write("ip,vni_id,mac_addr,active_source,active_source_timestamp,ip_address\n")  # Header CSV
-        with open(f"{json_folder}/evpn_database_summary-{timestamp}.csv", "w") as txt_out:
+        with open(f"{json_folder}/evpn_database_summary-{timestamp}.csv", "w", encoding="utf-8") as txt_out:
             txt_out.write(f"ip,evpn_count\n") # Header for summary CSV
             for filename in os.listdir(json_folder):
                 if "show_evpn_database" in filename and filename.endswith(".json"):
                     ip = filename.split(".json")[0].split("-")[0]
-                    with open(os.path.join(json_folder, filename), "r") as file:
+                    with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                         data = json.load(file)
 
                     try:
@@ -242,7 +330,7 @@ def evpn_database(timestamp):
                         summary_line = f"{ip},{len(all_evpn)}\n"
                         txt_out.write(summary_line)
                     except Exception as e:
-                        print(f"Error processing {filename}: {e}")
+                        print(f"{ERROR} processing {filename}: {e}")
 
 def save_config_to_json(timestamp):
     json_folder = f"output-{timestamp}"
@@ -250,27 +338,37 @@ def save_config_to_json(timestamp):
         if "show_configuration" in filename:
             full_path = os.path.join(json_folder, filename)
             try:
-                with open(full_path, "r") as file:
+                with open(full_path, "r", encoding="utf-8") as file:
                     data = json.load(file)
+
                 hostname = data["configuration"]["system"]["host-name"]
                 if "-RE" in hostname:
                     hostname = hostname.split("-RE")[0]
-                output_dir = f"{json_folder}/config/"
+
+                output_dir = os.path.join(json_folder, "config")
                 os.makedirs(output_dir, exist_ok=True)
-                with open(os.path.join(output_dir, f"{hostname}.json"), "w") as out_file:
+
+                output_path = os.path.join(output_dir, f"{hostname}.json")
+                with open(output_path, "w", encoding="utf-8") as out_file:
                     json.dump(data, out_file, indent=4)
+
             except json.JSONDecodeError:
-                print(f"  ! WARNING: {filename} is not valid JSON, skipping")
+                print(f"{WARNING}: {filename} is not valid JSON, skipping")
+            except UnicodeDecodeError as e:
+                print(f"{ERROR}: Cannot read {filename} due to encoding issue: {e}")
+            except Exception as e:
+                print(f"{ERROR}: Unexpected processing {filename}: {e}")
+
 
 def get_esi(timestamp):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/esi-lag-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write("ip,interface,esi_id\n")  # Header CSV
         for filename in os.listdir(json_folder):
             if filename.endswith(".json"):
                 ip = filename.split(".json")[0].split("-")[0]
-                with open(os.path.join(json_folder, filename), "r") as file:
+                with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                     data = json.load(file)
 
                 try:
@@ -281,17 +379,17 @@ def get_esi(timestamp):
                             line = f"{ip},{interface["name"]},{interface["esi"]["identifier"]}\n"
                             out.write(line)
                 except Exception as e:
-                    print(f"Error processing {filename}: {e}")
+                    print(f"{ERROR} processing {filename}: {e}")
     
 def alarm(timestamp, type):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/{type}_alarm-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write(f"ip,{type}_alarm_count\n")  # Header CSV
         for filename in os.listdir(json_folder):
             if f"show_{type}_alarm.json" in filename:
                 ip = filename.split(".json")[0].split("-")[0]
-                with open(os.path.join(json_folder, filename), "r") as file:
+                with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                     data = json.load(file)
 
                 try:
@@ -305,17 +403,17 @@ def alarm(timestamp, type):
                     #line = f"{ip},{vlan_name},{vlan_state},{vlan_tag},{vlan_vxlan_enabled},{tagged_interfaces},{untagged_interfaces},{mac_count}\n"
                     out.write(line)
                 except Exception as e:
-                    print(f"Error processing {filename}: {e}")
+                    print(f"{ERROR} processing {filename}: {e}")
 
 def chassis_re(timestamp):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/chassis_util-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write("ip,cpu_usage,mem_usage\n")  # Header CSV
         for filename in os.listdir(json_folder):
             if "chassis_routing-engine" in filename and filename.endswith(".json"):
                 ip = filename.split(".json")[0].split("-")[0]
-                with open(os.path.join(json_folder, filename), "r") as file:
+                with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                     data = json.load(file)
 
                 try:
@@ -332,17 +430,17 @@ def chassis_re(timestamp):
                     line = f"{ip},{cpu_usage},{mem_usage}\n" 
                     out.write(line)
                 except Exception as e:
-                    print(f"Error processing {filename}: {e}")
+                    print(f"{ERROR} processing {filename}: {e}")
 
 def route_evpn_summary(timestamp):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/route-evpn-summary-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write("ip,destinations,routes\n")  # Header CSV
         for filename in os.listdir(json_folder):
             if "show_route_summary_table_bgp.evpn" in filename and filename.endswith(".json"):
                 ip = filename.split(".json")[0].split("-")[0]
-                with open(os.path.join(json_folder, filename), "r") as file:
+                with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                     data = json.load(file)
 
                 try:
@@ -352,19 +450,19 @@ def route_evpn_summary(timestamp):
                     line = f"{ip},{destination_count},{route_count}\n" 
                     out.write(line)
                 except Exception as e:
-                    print(f"Error processing {filename}: {e}")
+                    print(f"{ERROR} processing {filename}: {e}")
 
 def arp(timestamp):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/arp_database-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write("ip,mac_addr,address,interface\n")  # Header CSV
-        with open(f"{json_folder}/arp_summary-{timestamp}.csv", "w") as txt_out:
+        with open(f"{json_folder}/arp_summary-{timestamp}.csv", "w", encoding="utf-8") as txt_out:
             txt_out.write(f"ip,arp_count\n") # Header for summary CSV
             for filename in os.listdir(json_folder):
                 if "show_arp" in filename and filename.endswith(".json"):
                     ip = filename.split(".json")[0].split("-")[0]
-                    with open(os.path.join(json_folder, filename), "r") as file:
+                    with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                         data = json.load(file)
 
                     try:
@@ -378,19 +476,19 @@ def arp(timestamp):
                         summary_line = f"{ip},{len(all_arp)}\n"
                         txt_out.write(summary_line)
                     except Exception as e:
-                        print(f"Error processing {filename}: {e}")
+                        print(f"{ERROR} processing {filename}: {e}")
  
 def bgp_summary(timestamp):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/bgp_neighbor-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write("ip,peer,asn,flap_count,last_event_flap,state\n")  # Header CSV
-        with open(f"{json_folder}/bgp_summary-{timestamp}.csv", "w") as txt_out:
+        with open(f"{json_folder}/bgp_summary-{timestamp}.csv", "w", encoding="utf-8") as txt_out:
             txt_out.write(f"ip,establish_count,down_count\n") # Header for summary CSV
             for filename in os.listdir(json_folder):
                 if "show_bgp_neighbor" in filename and filename.endswith(".json"):
                     ip = filename.split(".json")[0].split("-")[0]
-                    with open(os.path.join(json_folder, filename), "r") as file:
+                    with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                         data = json.load(file)
 
                     try:
@@ -415,19 +513,19 @@ def bgp_summary(timestamp):
                         summary_line = f"{ip},up : {total_established},down : {total_down}\n"
                         txt_out.write(summary_line)
                     except Exception as e:
-                        print(f"Error processing {filename}: {e}")            
+                        print(f"{ERROR} processing {filename}: {e}")            
 
 def bfd_summary(timestamp):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/bfd_session-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write("ip,peer,state,uptime\n")  # Header CSV
-        with open(f"{json_folder}/bfd_summary-{timestamp}.csv", "w") as txt_out:
+        with open(f"{json_folder}/bfd_summary-{timestamp}.csv", "w", encoding="utf-8") as txt_out:
             txt_out.write(f"ip,up_count,down_count\n") # Header for summary CSV
             for filename in os.listdir(json_folder):
                 if "show_bfd_session_detail" in filename and filename.endswith(".json"):
                     ip = filename.split(".json")[0].split("-")[0]
-                    with open(os.path.join(json_folder, filename), "r") as file:
+                    with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                         data = json.load(file)
 
                     try:
@@ -448,17 +546,17 @@ def bfd_summary(timestamp):
                         summary_line = f"{ip},up : {total_up},down : {total_down}\n"
                         txt_out.write(summary_line)
                     except Exception as e:
-                        print(f"Error processing {filename}: {e}")
+                        print(f"{ERROR} processing {filename}: {e}")
 
 def ddos_summary(timestamp):
     json_folder = f"output-{timestamp}"
     output_file = f"{json_folder}/ddos_summary-{timestamp}.csv"
-    with open(output_file, "w") as out:
+    with open(output_file, "w", encoding="utf-8") as out:
         out.write("ip,total_packet,mod_packet,rcvd_packet,violation_packet\n")  # Header CSV
         for filename in os.listdir(json_folder):
             if "show_ddos-protection_protocols" in filename and filename.endswith(".json"):
                 ip = filename.split(".json")[0].split("-")[0]
-                with open(os.path.join(json_folder, filename), "r") as file:
+                with open(os.path.join(json_folder, filename), "r", encoding="utf-8") as file:
                     data = json.load(file)
                 try:
                     all_ddos = data["ddos-protocols-information"][0]
@@ -469,14 +567,14 @@ def ddos_summary(timestamp):
                     line = f"{ip},{total_packet_type},{mod_packet_types},{rcvd_packet},{violation_packet}\n"
                     out.write(line)
                 except Exception as e:
-                    print(f"Error processing {filename}: {e}")
+                    print(f"{ERROR} processing {filename}: {e}")
 
 def convert_arp_summary_to_json(timestamp):
     csv_folder = f"output-{timestamp}"
     # Ambil timestamp dari nama file
     output_file = f"{csv_folder}/arp_summary-{timestamp}.csv"
     db = {}
-    with open(output_file) as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             ip = row["ip"]
@@ -495,7 +593,7 @@ def convert_vlan_summary_to_json(timestamp):
     # Ambil timestamp dari nama file
     output_file = f"{csv_folder}/vlan_summary-{timestamp}.csv"
     db = {}
-    with open(output_file) as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             ip = row["ip"]
@@ -515,7 +613,7 @@ def convert_system_alarm_to_json(timestamp):
     # Ambil timestamp dari nama file
     output_file = f"{csv_folder}/system_alarm-{timestamp}.csv"
     db = {}
-    with open(output_file) as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             ip = row["ip"]
@@ -534,7 +632,7 @@ def convert_chassis_alarm_to_json(timestamp):
     # Ambil timestamp dari nama file
     output_file = f"{csv_folder}/chassis_alarm-{timestamp}.csv"
     db = {}
-    with open(output_file) as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             ip = row["ip"]
@@ -554,7 +652,7 @@ def convert_route_evpn_summary_to_json(timestamp):
     # Ambil timestamp dari nama file
     output_file = f"{csv_folder}/route-evpn-summary-{timestamp}.csv"
     db = {}
-    with open(output_file) as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             ip = row["ip"]
@@ -574,7 +672,7 @@ def convert_evpn_database_summary_to_json(timestamp):
     # Ambil timestamp dari nama file
     output_file = f"{csv_folder}/evpn_database_summary-{timestamp}.csv"
     db = {}
-    with open(output_file) as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             ip = row["ip"]
@@ -593,7 +691,7 @@ def convert_ethernet_switching_table_summary_to_json(timestamp):
     # Ambil timestamp dari nama file
     output_file = f"{csv_folder}/ethernet_switching_table_summary-{timestamp}.csv"
     db = {}
-    with open(output_file) as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             ip = row["ip"]
@@ -612,7 +710,7 @@ def convert_ddos_summary_to_json(timestamp):
     # Ambil timestamp dari nama file
     output_file = f"{csv_folder}/ddos_summary-{timestamp}.csv"
     db = {}
-    with open(output_file) as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             ip = row["ip"]
@@ -634,7 +732,7 @@ def convert_chassis_util_summary_to_json(timestamp):
     # Ambil timestamp dari nama file
     output_file = f"{csv_folder}/chassis_util-{timestamp}.csv"
     db = {}
-    with open(output_file) as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             ip = row["ip"]
@@ -654,7 +752,7 @@ def convert_bfd_summary_to_json(timestamp):
     # Ambil timestamp dari nama file
     output_file = f"{csv_folder}/bfd_summary-{timestamp}.csv"
     db = {}
-    with open(output_file) as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             ip = row["ip"]
@@ -674,7 +772,7 @@ def convert_bgp_summary_to_json(timestamp):
     # Ambil timestamp dari nama file
     output_file = f"{csv_folder}/bgp_summary-{timestamp}.csv"
     db = {}
-    with open(output_file) as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             ip = row["ip"]
@@ -693,11 +791,24 @@ def load_existing_db(file_path):
     if not os.path.exists(file_path):
         print("📂 File db.json belum ada. Membuat baru...")
         return {}
-    with open(file_path) as f:
-        return json.load(f)
+    
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read().strip()
+            if not content:
+                print("⚠️  File db.json kosong. Menginisialisasi data kosong...")
+                return {}
+            return json.loads(content)
+    except json.JSONDecodeError as e:
+        print(f"❌ Gagal memuat db.json karena format tidak valid: {e}")
+        print("⚠️  Menggunakan database kosong sementara.")
+        return {}
+    except Exception as e:
+        print(f"❌ Terjadi kesalahan saat membaca db.json: {e}")
+        return {}
 
 def save_db(file_path, db):
-    with open(file_path, "w") as f:
+    with open(file_path, "w", encoding="utf-8") as f:
         json.dump(db, f, indent=2)
     print(f"✅ db.json berhasil diperbarui: {file_path}")
 
@@ -717,12 +828,20 @@ def merge_to_db(existing_db, new_data):
     return existing_db
 
 # === MAIN ===
-command_list=load_command_list("command.txt")
+# Banner
+banner()
 
-device_list = load_device_list("device_cred.txt")
+# Load Credential
+jh_ip, jh_user, jh_pass = input_jumphost()
+
+# Command and IP List
+command_list = input_command_list()
+device_list = input_device_list()
+# command_list=load_command_list("command.txt")
+# device_list = load_device_list("device_cred.txt")
 
 # Hanya konek ke jumphost sekali
-jh_client = connect_jumphost(jumphost_ip, jumphost_user, jumphost_pass)
+jh_client = connect_jumphost(jh_ip, jh_user, jh_pass)
 
 #jakarta = pytz.timezone("Asia/Jakarta")
 timestamp = datetime.now().strftime("%y%m%d-%H%M")
@@ -841,7 +960,7 @@ if checklist_param == 11:
     # Simpan hasil
     save_db(db_path, existing_db)
     def export_db_to_csv(db_path, output_csv):
-        with open(db_path) as f:
+        with open(db_path, encoding="utf-8") as f:
             db = json.load(f)
 
         all_timestamps = set()
@@ -871,7 +990,7 @@ if checklist_param == 11:
         header = ["IP", "checklist"] + all_timestamps
 
         # Tulis ke CSV
-        with open(output_csv, "w", newline="") as f:
+        with open(output_csv, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
             writer.writerow(header)
             writer.writerows(rows)
@@ -882,7 +1001,7 @@ if checklist_param == 11:
         import pandas as pd
         from datetime import datetime
         
-        with open(db_path) as f:
+        with open(db_path, encoding="utf-8") as f:
             db = json.load(f)
 
         all_timestamps = set()
