@@ -1,4 +1,4 @@
-# CHEKLIST PARAMETERJ UNIPER IP FABRIC v2.0
+# CHEKLIST PARAMETER JUNIPER IP FABRIC v2.0
 
 ## Description Project
 This document explains how to execute the tools for checklist paramater
