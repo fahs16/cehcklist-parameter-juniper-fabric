@@ -30,8 +30,5 @@ This document explains how to execute the tools for checklist paramater
                             TOOLS INSTALLATION AUTOMATION PARAMATER COMPLETED 
                                     ENJOY AND KEEP RUNNING IT!
     +----------------------------------------------------------------------------------------------------+
-    ```
-
-## Credits
-This project was developed and maintained by IP Fabric DC OPS - [PT Media Telekomunikasi Mandiri](https://mtm.id/)  
+    ``` 
 _End of document_
