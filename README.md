@@ -24,7 +24,7 @@ This document explains how to execute the tools for checklist paramater
     ```
     +----------------------------------------------------------------------------------------------------+
                             TOOLS INSTALLATION AUTOMATION PARAMATER COMPLETED 
-                                    ENJOY AND KEEP RUNNING IT!
+                                    ENJOY AND RUN THE SCRIPT!
     +----------------------------------------------------------------------------------------------------+
     ``` 
 _End of document_

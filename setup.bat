@@ -89,9 +89,9 @@ echo.
 
 echo ================================================================================ 
 echo NEXT STEP:
-echo 1. The script will be executed using: script.exe
+echo 1. The script will be named: juniper-checklist-parameter.exe
 echo 2. A shortcut has been created on Desktop.
-echo 3. Double click the file: script.exe
+echo 3. Double click the file ond Desktop: juniper-checklist-parameter.exe
 echo 4. Input credentials, Juniper commands, and device IP list.
 echo 5. Results will be stored in folder output-{timestamp}, report.csv, and report.xlsx
 echo 6. Enjoy and stay connected. Thank you!
