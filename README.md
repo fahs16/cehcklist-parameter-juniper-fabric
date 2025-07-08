@@ -1,7 +1,25 @@
-# checklist-parameter-juniper-fabric
-Automation generate some output from SSH Juniper to XLSX  
-only if all required commands is inserted  
-this is just a raw script as template or sample case if I want to create another function  
-basically it is SSH automation using paramiko that support multiple command and it is connected via jumphost or bastion  
-if you use this script, make sure remove db.json, report.csv, and report.xlsx before running the script   
-this script is automatically update the report.xlsx based on db.json within the timestamp when you run  
+# CHEKLIST PARAMETER JUNIPER IP FABRIC v2.0
+
+## Description Project
+This document explains how to execute the tools for checklist paramater
+
+## Version and Requirements (Mandatory)
+- Python Programming Language **3.13.4**
+- PIP **v25.1.1**
+**Make Sure you're are installed python and PIP**
+
+## Installation Guide
+1. **Navigate to the directory downloaded: checklist-parameter-juniper-fabric.zip**
+
+2. **Double click the setup.bat**  
+
+3. **(NO ACTION REQUREID) Wait until the installation process completed oke!**  
+   You will see the following banner when the process finishes:
+    ```
+    +----------------------------------------------------------------------------------------------------+
+                            TOOLS INSTALLATION AUTOMATION PARAMATER COMPLETED 
+                                    ENJOY AND RUN THE SCRIPT!
+    +----------------------------------------------------------------------------------------------------+
+    ``` 
+
+4. **The tool name: juniper-checklist-parameter.exe will be exist automation on Desktop** 
