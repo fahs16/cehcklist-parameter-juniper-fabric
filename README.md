@@ -8,17 +8,15 @@ This document explains how to execute the tools for checklist paramater
 - PIP **v25.1.1**
 **Make Sure you're are installed python and PIP**
 
----
-
 ## Installation Guide
 1. **Navigate to the directory downloaded:**
     ```bash
     extract the file checklist-parameter-juniper-fabric.zip
     ```
 
-2. **Run the bash file EXE**  
+2. **Double click the setup.bat**  
     ```bash
-    execute setup.bat
+    double click setup.bat
     ```
 
 3. **(NO ACTION REQUREID) Wait until the installation process completed oke!**  
